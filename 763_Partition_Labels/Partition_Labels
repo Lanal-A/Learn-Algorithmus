@@ -1,0 +1,54 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+class Solution {
+public:
+    vector<int> partitionLabels(string s) {
+        unordered_map<char, int> mp;
+
+        // Record the last occurrence of each character
+        for (int i = 0; i < (int)s.size(); i++) {
+            mp[s[i]] = i;
+        }
+
+        vector<int> res;
+        int prev = -1;
+        int maxi = 0;
+
+        for (int i = 0; i < (int)s.size(); i++) {
+            maxi = max(maxi, mp[s[i]]);  // enlarge current partition boundary
+
+            if (maxi == i) {  
+                // we've reached the end of a partition
+                res.push_back(maxi - prev);
+                prev = maxi;
+            }
+        }
+        return res;
+    }
+};
+
+int main() {
+    Solution sol;
+
+    // Example tests
+    vector<string> tests = {
+        "ababcbacadefegdehijhklij",
+        "eccbbbbdec",
+        "caedbdedda"
+    };
+
+    for (string &t : tests) {
+        vector<int> result = sol.partitionLabels(t);
+
+        cout << "Input: " << t << "\nOutput: ";
+        for (int x : result) {
+            cout << x << " ";
+        }
+        cout << "\n\n";
+    }
+
+    return 0;
+}
